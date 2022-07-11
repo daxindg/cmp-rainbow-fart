@@ -45,12 +45,8 @@ source.complete = function(self, params, callback)
   end
   local res = self.voices.get_voice_path(self.voices, kw)
   if res ~= nil then
-    local co = coroutine.create(
-      function()
-        self.voices.play(res)
-      end
-    )
-    coroutine.resume(co)
+    print(res)
+    self.voices.play(res)
   end
 end
 

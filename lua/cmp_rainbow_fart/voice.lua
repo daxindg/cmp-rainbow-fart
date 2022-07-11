@@ -1,6 +1,22 @@
 local voice = {}
-local prefix = vim.fn.stdpath("data").."/site/pack/packer/start/cmp-rainbow-fart/lua/cmp_rainbow_fart/".."built-in-voice-packages/built-in-voice-chinese/"
-local libpath = vim.fn.stdpath("data").."/site/pack/packer/start/cmp-rainbow-fart/target/release/libaplay.so"
+local base = vim.fn.stdpath("data").."/site/pack/packer/start/cmp-rainbow-fart/"
+local prefix = base.."lua/cmp_rainbow_fart/".."built-in-voice-packages/built-in-voice-chinese/"
+local player = base.."bin/aplay"
+
+local file_exists = function(name)
+	local f = io.open(name,"r")
+	if f then
+		io.close(f)
+		return true
+	else
+		return false
+	end
+end
+
+local build = function()
+  io.popen('sh -c "cd '..base..' && cargo build --release > /dev/null && mkdir -p bin && mv target/release/aplay bin"')
+end
+
 voice.new = function()
   local self = setmetatable({}, { __index = voice })
   self.kv = {}
@@ -13,6 +29,9 @@ voice.new = function()
         table.insert(self.kv[k], v)
       end
     end
+  end
+  if file_exists(player) ~= true then
+    build()
   end
   return self
 end
@@ -33,16 +52,18 @@ end
 
 
 voice.play = function(path)
-  local ffi = require("ffi")
-  ffi.cdef[[
-  void aplay(char * uri);
-  ]]
-  local lib = ffi.load(libpath)
+  io.popen(player.." "..path)
 
-  local c_path = ffi.new("char[?]", #path + 1)
-  ffi.copy(c_path, path)
+  -- local ffi = require("ffi")
+  -- ffi.cdef[[
+  -- void aplay(char * uri);
+  -- ]]
+  -- local lib = ffi.load(libpath)
 
-  lib.aplay(c_path)
+  -- local c_path = ffi.new("char[?]", #path + 1)
+  -- ffi.copy(c_path, path)
+
+  -- lib.aplay(c_path)
 end
 
 return function()
