@@ -67,7 +67,6 @@ source.complete = function(self, params, callback)
   local line = params.context.cursor_before_line
   local res = self.voices.get_voice_path(self.voices, line)
   if res ~= nil then
-    print(res)
     self.voices.play(self.voices, res)
   end
 end
