@@ -47,7 +47,6 @@ end
 voice.get_voice_path = function(self, line)
   local voices = nil
   for k, v in pairs(self.kv) do
-    print(k .. ' ' .. line .. ' ' .. line:sub(-string.len(k)))
     if line:sub(-string.len(k .. ' ')) == k .. ' ' then
       voices = v
       break
@@ -68,7 +67,7 @@ voice.play = function(self, path)
     return
   end
   self.playing = true
-  vim.fn.jobstart(player .. " " .. path, {
+  vim.fn.jobstart(player .. ' ' .. path .. ' ' .. '500', {
     on_exit = function()
       self.playing = false
     end
