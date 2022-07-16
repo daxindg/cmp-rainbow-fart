@@ -16,7 +16,7 @@ cmp-rainbow-fart is a [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) source tha
 ```lua
 require'cmp'.setup {
   sources = {
-    { name = 'rbfart' }
+    { name = 'rbfart', option = { on = true } }
   }
 }
 ```
