@@ -1,5 +1,9 @@
 local voice = {}
-local base = vim.fn.stdpath("data") .. "/site/pack/packer/start/cmp-rainbow-fart/"
+
+local base = (function()
+  return debug.getinfo(2, "S").source:sub(2):match("(.*/)")
+end)() .. '../../'
+
 local prefix = base .. "lua/cmp_rainbow_fart/" .. "built-in-voice-packages/built-in-voice-chinese/"
 local player = base .. "bin/aplay"
 
@@ -14,8 +18,10 @@ local file_exists = function(name)
 end
 
 local build = function()
-  vim.fn.systemlist('sh -c "cd ' ..
-    base .. ' && cargo build --release > /dev/null && mkdir -p bin && mv target/release/aplay bin"')
+  print('cmp-rainbow-fart building');
+  local build_cmd = 'sh -c "cd ' ..
+      base .. ' && cargo build --release && mkdir -p bin && mv target/release/aplay bin"';
+  vim.fn.systemlist(build_cmd);
 end
 
 
